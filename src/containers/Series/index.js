@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import SeriesList from '../../components/SeriesList';
+import Loader from '../../components/Loader';
+import Intro from '../../components/Intro';
 
 class Series extends Component {
     state = {
@@ -7,17 +9,6 @@ class Series extends Component {
         seriesName: '',
         isFetching: false
     }
-
-    // componentDidMount() {
-    //     // const series = ["Vikings", "Game of Thrones"];
-
-    //     // setTimeout(() => {
-    //     //   this.setState({ series });
-    //     // }, 2000);
-    //     fetch('http://api.tvmaze.com/search/shows?q=Vikings')
-    //     .then(response => response.json())
-    //     .then(json => this.setState({ series: json }))
-    // }
 
     onSeriesInputChange = e => {
         this.setState({ seriesName: e.target.value, isFetching: true });
@@ -34,7 +25,7 @@ class Series extends Component {
         const { series, seriesName, isFetching } = this.state;
         return (
             <div> 
-                {/* The length of series array - {this.state.series.length}   */}
+                <Intro message="Here you can find all." />
                 <div>
                     <input 
                     value={seriesName} 
@@ -42,18 +33,18 @@ class Series extends Component {
                     onChange={this.onSeriesInputChange} />
                 </div>   
                 { 
-                    series.length === 0 && seriesName.trim() === '' 
+                    !isFetching && series.length === 0 && seriesName.trim() === '' 
                     && 
                     <p>Please enter series name into the input</p>
                 }
 
                 {
-                    series.length === 0 && seriesName.trim() !== ''
+                    !isFetching && series.length === 0 && seriesName.trim() !== ''
                     &&
                     <p>No TV series have been found with this name</p>
                 }
                 {
-                    isFetching && <p>Loading...</p>
+                    isFetching && <Loader />
                 }
                 {
                     !isFetching && <SeriesList list={this.state.series} />
